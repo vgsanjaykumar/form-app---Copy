@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h2>Submissions Dashboard</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th> <!-- ✅ Added Phone Field -->
+                <th>Resume</th>
+            </tr>
+        </thead>
+        <tbody id="submissionsTableBody"></tbody>
+    </table>
+
+    <script>
+        async function fetchSubmissions() {
+            try {
+                const response = await fetch("http://localhost:5010/submissions"); // ✅ Fetch API Data
+                const data = await response.json();
+
+                const tableBody = document.getElementById("submissionsTableBody");
+                tableBody.innerHTML = ""; // ✅ Clear old data
+
+                data.forEach((submission) => {
+                    const row = `
+                        <tr>
+                            <td>${submission.name}</td>
+                            <td>${submission.email}</td>
+                            <td>${submission.phone}</td> <!-- ✅ Display Phone -->
+                            <td><a href="${submission.resume}" target="_blank">View Resume</a></td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+            } catch (error) {
+                console.error("❌ Error fetching data:", error);
+            }
+        }
+
+        // ✅ Fetch data when page loads
+        document.addEventListener("DOMContentLoaded", fetchSubmissions);
+    </script>
+</body>
+</html>
